@@ -3,14 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"	
+#include "Engine/DataTable.h"
 #include "Sound/SoundBase.h"
-#include"DialogueLines.generated.h"
+#include"Dialogue.generated.h"
 
 /**
  * 
  */
 USTRUCT(BlueprintType)
-struct ANIMATION_API FDialogueLine
+struct ANIMATION_API FDialogue : public FTableRowBase
 {
 
 	GENERATED_BODY()

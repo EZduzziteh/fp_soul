@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
-#include "NPCDialogue.h"
+#include "DialogueNPC.h"
 #include "DT_NPC_Dialogue_Master.generated.h"
 
 /**

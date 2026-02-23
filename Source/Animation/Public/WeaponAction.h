@@ -4,6 +4,7 @@
 #include "Animation/AnimMontage.h"
 #include "DamageClass.h"
 #include "Damage.h"
+#include "Engine/DataTable.h"
 #include "WeaponAction.generated.h"
 
 USTRUCT(BlueprintType)

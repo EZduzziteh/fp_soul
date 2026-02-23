@@ -1,15 +1,20 @@
 #pragma once
+
+#include "CoreMinimal.h"
 #include "InventoryItem.h"
+#include "Engine/DataTable.h"
 #include "Item_Quantity.generated.h"
-struct ANIMATION_API FItem_Quantity
 
-	{
-		GENERATED_BODY()
+USTRUCT(BlueprintType)
+struct ANIMATION_API FItem_Quantity : public FTableRowBase
+{
+    GENERATED_BODY()
 
-	public:
+public:
 
-		UPROPERTY(EditAnywhere, BlueprintReadWrite)	
-		FInventoryItem Item;
-		UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int Quantity;
-}
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FInventoryItem Item;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 Quantity = 0;
+};

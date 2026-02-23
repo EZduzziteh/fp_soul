@@ -6,7 +6,7 @@
 #include "WeaponInfo.generated.h"
 
 USTRUCT(BlueprintType)
-struct ANIMATION_API FWeaponInfo
+struct ANIMATION_API FWeaponInfo : public FTableRowBase
 {
 	GENERATED_BODY()
 
