@@ -7,6 +7,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AsyncRootMovement.h"
+#include "PlayerControllers//MainPlayerController.h"
 #include "InputActionValue.h"
 #include "InputMappingContext.h"
 #include "../../../Plugins/RootMovement/Source/RootMovement/Public/AsyncRootMovement.h"
@@ -103,6 +104,12 @@ void ACombatCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
             EnhancedInput->BindAction(InteractAction, ETriggerEvent::Started, this, &ACombatCharacter::InteractStarted);
             EnhancedInput->BindAction(InteractAction, ETriggerEvent::Completed, this, &ACombatCharacter::InteractReleased);
         }
+
+        if (OpenInventoryAction)
+        {
+            EnhancedInput->BindAction(OpenInventoryAction, ETriggerEvent::Started, this, &ACombatCharacter::OpenInventoryStarted);
+        }
+
     }
 }
 
@@ -319,10 +326,12 @@ EMoveDirection ACombatCharacter::GetLastMoveDirection() const
 
 void ACombatCharacter::SetInteractionMessage_Implementation(const FString& Message)
 {
-    if (GEngine)
-    {
-        //GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, Message);
-    }
+   
+        AMainPlayerController* mainPlayerController = Cast<AMainPlayerController>(GetController());
+
+        if (mainPlayerController) {
+            mainPlayerController->HUDWidget->SetText(Message);
+        }
 }
 void ACombatCharacter::JumpStarted(const FInputActionValue& Value)
 {
@@ -428,6 +437,16 @@ void ACombatCharacter::CastReleased(const FInputActionValue& Value)
         GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("no interactable or doesnt implement uinteractable")));
     }
 }
+
+void ACombatCharacter::OpenInventoryStarted(const FInputActionValue& Value)
+{
+
+    if (AMainPlayerController* PC = Cast<AMainPlayerController>(GetController())) {
+
+        PC->OpenInventoryWindow();
+    }
+}
+
 void ACombatCharacter::InteractReleased(const FInputActionValue& Value)
 {
     UCharacterMovementComponent* Movement = GetCharacterMovement();

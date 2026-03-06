@@ -14,8 +14,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EWeaponClass WeaponType = EWeaponClass::Sword;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "_Actions")
 	FWeaponAction UpAction; 

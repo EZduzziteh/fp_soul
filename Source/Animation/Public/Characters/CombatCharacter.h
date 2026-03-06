@@ -96,6 +96,7 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
     USkeletalMeshComponent* SecondaryWeapon;
 
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UInventoryComponent* InventoryComponent;
 
@@ -133,6 +134,7 @@ protected:
     void JumpStarted(const FInputActionValue& Value);
     void InteractStarted(const FInputActionValue& Value);
     void InteractReleased(const FInputActionValue& Value);
+    void OpenInventoryStarted(const FInputActionValue& Value);
 
     // Mouse movement detection
     void DetectMouseDirection(float DeltaX, float DeltaY);
@@ -218,6 +220,9 @@ protected:
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
     UInputAction* JumpAction;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
+    UInputAction* OpenInventoryAction;
 
 
 

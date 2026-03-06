@@ -5,7 +5,12 @@
 #include "EquipmentClass.generated.h"  
 
 UENUM(BlueprintType)
-enum class EEquipmentClass : uint8
+enum class EEquipmentSlotType : uint8
 {
-    Armor       UMETA(DisplayName = "Armor"),
+    Head       UMETA(DisplayName = "Head"), 
+    Chest      UMETA(DisplayName = "Chest"),
+    Legs      UMETA(DisplayName = "Legs"),
+    Feet      UMETA(DisplayName = "Feet"),
+    Primary       UMETA(DisplayName = "Primary"),
+    Secondary       UMETA(DisplayName = "Secondary"),
 };

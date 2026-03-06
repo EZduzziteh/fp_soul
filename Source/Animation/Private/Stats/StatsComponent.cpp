@@ -2,15 +2,15 @@
 
 
 #include "Stats/StatsComponent.h"
+#include "TimerManager.h"
 
 // Sets default values for this component's properties
 UStatsComponent::UStatsComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
-	// ...
 }
 
 
@@ -19,17 +19,28 @@ void UStatsComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	GetWorld()->GetTimerManager().SetTimer(
+		RegenerateTimer,                 // Handle
+		this,                          // Object
+		&UStatsComponent::Regenerate,    // Function to call
+		RegenerationTickRate,                          // Time delay (seconds)
+		true                           // Loop? true = repeat
+	);
+
 }
 
 
-// Called every frame
-void UStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UStatsComponent::Regenerate()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	if (bRegenerateHealth) {
+		health += HealthRegenerationRate;
+	}
+	if (bRegenerateMana) {
+		mana += ManaRegenerationRate;
+	}
+	if (bRegenerateStamina) {
+		stamina += StaminaRegenerationRate;
+	}
 }
 
 

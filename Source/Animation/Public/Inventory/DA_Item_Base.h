@@ -16,5 +16,6 @@ class ANIMATION_API UDA_Item_Base : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly )
 	FInventoryItem Item;
 };

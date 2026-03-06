@@ -19,3 +19,19 @@ void AMainPlayerController::BeginPlay()
         }
     }
 }
+
+
+
+void AMainPlayerController::OpenInventoryWindow() {
+    if (HUDWidget) {
+        
+        HUDWidget->ToggleInventoryWindow();
+    }
+}
+
+void AMainPlayerController::OpenDialogueWindow() {
+    if (HUDWidget) {
+
+        HUDWidget->ToggleDialogueWindow();
+    }
+}

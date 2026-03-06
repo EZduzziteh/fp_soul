@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UI/Widget_Hud.h"
 #include "GameFramework/PlayerController.h"
 #include "MainPlayerController.generated.h"
 
@@ -15,10 +16,18 @@ class ANIMATION_API AMainPlayerController : public APlayerController
 	GENERATED_BODY()
 
 	public: 
-		UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "_UI")
-		TSubclassOf<class UWidget_Hud> MyWidgetClass;
 	
-		UPROPERTY()
+		virtual void BeginPlay() override;
+		void OpenInventoryWindow();
+
+		
+
+		UPROPERTY(BlueprintReadOnly, Category = "_UI")
 		UWidget_Hud* HUDWidget;
-		void BeginPlay();
+
+	protected:
+		
+
+		UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_UI")
+		TSubclassOf<class UWidget_Hud> MyWidgetClass;
 };

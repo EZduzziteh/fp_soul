@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interactable/Interactable.h" 
-#include "PickupItemInfo.h"
+#include "Inventory/Item_Quantity.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
 #include "Pickup.generated.h"
@@ -20,7 +20,7 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TArray<FPickupItemInfo> Items;
+	TArray<FItem_Quantity> Items;
 	
 	virtual void HandleInteraction_Implementation(AActor* Interactor) override;
 

@@ -33,13 +33,18 @@ void APickup::HandleInteraction_Implementation(AActor* Interactor)
 
     if (UInventoryComponent* Inventory = Interactor->FindComponentByClass<UInventoryComponent>())
     {
-        for (const FPickupItemInfo& Item : Items)
+        for (const FItem_Quantity& Item : Items)
         {
-            Inventory->AddItem(Item.ItemID, Item.Quantity);
-            UE_LOG(LogTemp, Log, TEXT("Added %d x %s to inventory"), Item.Quantity, *Item.ItemID);
+            if (!Item.Item) continue;
+
+            Inventory->AddItem(Item.Item, Item.Quantity);
+
+            UE_LOG(LogTemp, Log,
+                TEXT("Added %d x %s to inventory"),
+                Item.Quantity,
+                *Item.Item->GetName());
         }
 
-        // ?? Play pickup sound
         if (PickupSound)
         {
             UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());

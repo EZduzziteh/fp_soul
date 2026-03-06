@@ -13,32 +13,32 @@ UInventoryComponent::UInventoryComponent()
 	// ...
 }
 
-void UInventoryComponent::AddItem(const FString& itemID, int itemQuantity)
+void UInventoryComponent::AddItem(UDA_Item_Base* item, int itemQuantity)
 {
 
-	if (itemIDs.Contains(itemID)) {
+	if (Items.Contains(item)) {
 		//increment if we already have this item
-		int index = itemIDs.IndexOfByKey(itemID);
-		itemCounts[index] = itemCounts[index] + itemQuantity;
+		int index = Items.IndexOfByKey(item);
+		ItemCounts[index] = ItemCounts[index] + itemQuantity;
 	}
 	else {
 		//Add new if we dont already have this item
-		itemIDs.AddUnique(itemID);
-		itemCounts.Add(itemQuantity);
+		Items.AddUnique(item);
+		ItemCounts.Add(itemQuantity);
 
 	}
 
 }
 
-void UInventoryComponent::RemoveItem(const FString& itemID, int itemQuantity)
+void UInventoryComponent::RemoveItem(UDA_Item_Base* item, int itemQuantity)
 {
-	if (itemIDs.Contains(itemID)) {
+	if (Items.Contains(item)) {
 		//increment if we already have this item
-		int index = itemIDs.IndexOfByKey(itemID);
-		itemCounts[index] = itemCounts[index] - itemQuantity;
-		if (itemCounts[index] <= 0) {
-			itemCounts.RemoveAt(index);
-			itemIDs.RemoveAt(index);;
+		int index = Items.IndexOfByKey(item);
+		ItemCounts[index] = ItemCounts[index] - itemQuantity;
+		if (ItemCounts[index] <= 0) {
+			ItemCounts.RemoveAt(index);
+			Items.RemoveAt(index);;
 		}
 	}
 	else {

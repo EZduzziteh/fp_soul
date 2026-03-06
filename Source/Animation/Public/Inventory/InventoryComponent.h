@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Inventory/DA_Item_Base.h"
 #include "InventoryComponent.generated.h"
 
 
@@ -21,19 +22,19 @@ protected:
 public:
 
 	// Dynamic list of known spell names
-	UPROPERTY(BlueprintReadOnly,  Category = "Spells")
-	TArray<FString> itemIDs;
+	UPROPERTY(BlueprintReadOnly)
+	TArray<const UDA_Item_Base*> Items;
 
 	// Dynamic list of known spell names
-	UPROPERTY(BlueprintReadOnly,  Category = "Spells")
-	TArray<int> itemCounts;
+	UPROPERTY(BlueprintReadOnly)
+	TArray<int> ItemCounts;
 	// Example function to add a new spell
 
 	UFUNCTION(BlueprintCallable, Category = "_Inventory")
-	void AddItem(const FString& itemID, int itemQuantity);
+	void AddItem(UDA_Item_Base* item, int itemQuantity);
 
 	UFUNCTION(BlueprintCallable, Category = "_Inventory")
-	void RemoveItem(const FString& itemID, int itemQuantity);
+	void RemoveItem(UDA_Item_Base* item, int itemQuantity);
 
 		
 };

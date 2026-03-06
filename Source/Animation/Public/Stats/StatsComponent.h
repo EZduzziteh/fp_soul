@@ -16,13 +16,37 @@ public:
 	// Sets default values for this component's properties
 	UStatsComponent();
 
+	int health;
+	int stamina;
+	int mana;
+
+	bool bRegenerateHealth = false;
+	bool bRegenerateStamina = false;
+	bool bRegenerateMana = false;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_Health")
+	float HealthRegenerationRate;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_Stamina")
+	float StaminaRegenerationRate;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_Mana")
+	float ManaRegenerationRate;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category ="_Regeneration")
+	float RegenerationTickRate;
+
+	FTimerHandle RegenerateTimer;
+
+
+
+
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	
+	void Regenerate();
 		
 };

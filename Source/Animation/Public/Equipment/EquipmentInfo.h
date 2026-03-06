@@ -11,9 +11,7 @@ struct ANIMATION_API FEquipmentInfo
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EEquipmentClass equipmentType = EEquipmentClass::Armor;
+	EEquipmentSlotType equipmentSlot = EEquipmentSlotType::Head;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FText Name;
 
 };
