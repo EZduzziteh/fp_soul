@@ -29,9 +29,9 @@ void AMainPlayerController::OpenInventoryWindow() {
     }
 }
 
-void AMainPlayerController::OpenDialogueWindow() {
+void AMainPlayerController::OpenDialogueWindow(UTopicManagerComponent* topicManagerComponent) {
     if (HUDWidget) {
 
-        HUDWidget->ToggleDialogueWindow();
+        HUDWidget->ToggleDialogueWindow(topicManagerComponent);
     }
 }

@@ -6,6 +6,7 @@
 #include "Interactable/Interactable.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
+#include "Dialogue/TopicManagerComponent.h"
 #include "NonPlayerCharacter.generated.h"
 
 UCLASS()
@@ -14,6 +15,8 @@ class ANIMATION_API ANonPlayerCharacter : public ACharacter, public IInteractabl
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialogue")
+	UTopicManagerComponent* TopicManagerComponent;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -44,8 +47,6 @@ public:
 
 	virtual bool IsInteractionEnabled_Implementation() const override;
 
-	// Blueprint implementable event
-	UFUNCTION(BlueprintImplementableEvent, Category = "Interaction")
-	void OpenDialogueWindow();
+
 
 };

@@ -18,7 +18,11 @@ class ANIMATION_API AMainPlayerController : public APlayerController
 	public: 
 	
 		virtual void BeginPlay() override;
+		UFUNCTION(BlueprintCallable)
 		void OpenInventoryWindow();
+
+		UFUNCTION(BlueprintCallable)
+		void OpenDialogueWindow(UTopicManagerComponent* topicManagerComponent);
 
 		
 
