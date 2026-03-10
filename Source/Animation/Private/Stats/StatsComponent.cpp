@@ -33,14 +33,34 @@ void UStatsComponent::BeginPlay()
 void UStatsComponent::Regenerate()
 {
 	if (bRegenerateHealth) {
-		health += HealthRegenerationRate;
+		if (CurrentHealth < MaxHealth) {
+			CurrentHealth += HealthRegenerationRate;
+		}
 	}
 	if (bRegenerateMana) {
-		mana += ManaRegenerationRate;
+		if (CurrentMana < MaxMana) {
+			CurrentMana += ManaRegenerationRate;
+		}
 	}
 	if (bRegenerateStamina) {
-		stamina += StaminaRegenerationRate;
+		if (CurrentStamina < MaxStamina) {
+			CurrentStamina += StaminaRegenerationRate;
+			
+		}
 	}
+
+
+	if (CurrentHealth > MaxHealth) {
+		CurrentHealth = MaxHealth;
+	}
+	if (CurrentMana > MaxMana) {
+		CurrentMana = MaxMana;
+	}
+	if (CurrentStamina > MaxStamina) {
+		CurrentStamina = MaxStamina;
+	}
+	
+
 }
 
 

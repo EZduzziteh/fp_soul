@@ -6,6 +6,7 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Characters/EnemyCharacter.h"
+#include "AI/Faction.h"
 #include "EnemyAIController.generated.h"
 
 UCLASS()
@@ -25,6 +26,15 @@ protected:
 private:
     UPROPERTY(VisibleAnywhere, Category = "AI")
     UAIPerceptionComponent* AIPerceptionComponent;
+
+    UPROPERTY(VisibleAnywhere, Category = "_Factions")
+    EFaction faction;
+
+    UPROPERTY(VisibleAnywhere, Category = "_Factions")
+    TArray<EFaction> enemyFactions;
+
+    UPROPERTY(VisibleAnywhere, Category = "_Factions")
+    TArray<EFaction> friendlyFactions;
 
     UPROPERTY()
     UAISenseConfig_Sight* SightConfig;

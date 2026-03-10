@@ -7,10 +7,12 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
 #include "Dialogue/TopicManagerComponent.h"
+#include "Combat/Damager.h"
+#include "Combat/Damageable.h"
 #include "NonPlayerCharacter.generated.h"
 
 UCLASS()
-class ANIMATION_API ANonPlayerCharacter : public ACharacter, public IInteractable
+class ANIMATION_API ANonPlayerCharacter : public ACharacter, public IInteractable, public IDamageable, public IDamager
 {
 	GENERATED_BODY()
 

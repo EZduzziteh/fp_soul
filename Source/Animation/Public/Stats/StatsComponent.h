@@ -16,9 +16,20 @@ public:
 	// Sets default values for this component's properties
 	UStatsComponent();
 
-	int health;
-	int stamina;
-	int mana;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_Health")
+	int MaxHealth;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_Stamina")
+	int MaxStamina;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_Mana")
+	int MaxMana;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_Health")
+	int CurrentHealth;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_Stamina")
+	int CurrentStamina;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "_Mana")
+	int CurrentMana;
+
 
 	bool bRegenerateHealth = false;
 	bool bRegenerateStamina = false;

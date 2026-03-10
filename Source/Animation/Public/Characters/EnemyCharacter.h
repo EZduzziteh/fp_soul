@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AI/EnemyAIState.h"
+#include "Combat/Damager.h"
+#include "Combat/Damageable.h"
 #include "EnemyCharacter.generated.h"
 
 class UInventoryComponent;
@@ -15,7 +17,7 @@ class AAIController;
 class UAnimMontage;
 
 UCLASS()
-class ANIMATION_API AEnemyCharacter : public ACharacter
+class ANIMATION_API AEnemyCharacter : public ACharacter, public IDamageable, public IDamager
 {
     GENERATED_BODY()
 
@@ -44,23 +46,26 @@ protected:
 
 public:
 
+    
+
+
     // =========================
     // COMPONENTS
     // =========================
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UInventoryComponent* InventoryComponent;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     USpellbookComponent* SpellbookComponent;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UStatsComponent* StatsComponent;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UEquipmentComponent* EquipmentComponent;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UMeleeTraceComponent* MeleeTraceComponent;
 
     // =========================

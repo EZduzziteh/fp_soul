@@ -6,68 +6,39 @@
 #include "Magic/SpellbookComponent.h" // include your component header
 #include "Stats/StatsComponent.h"
 #include "AsyncRootMovement.h"
+#include "Combat/Damageable.h"
 #include "Equipment/EquipmentComponent.h"
 #include "Interactable/Interactable.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Combat/MeleeTraceComponent.h"
 #include "Inventory/InventoryComponent.h"
+#include "Combat/Damager.h"
+#include "Combat/ActionState.h"
+#include "Combat/MouseDirection.h"
+#include "Combat/MoveDirection.h"
 #include "CombatCharacter.generated.h"
 
-class UInputAction;
-class UInputMappingContext;
+
 class UCameraComponent;
 class USpringArmComponent;
-
-UENUM(BlueprintType)
-enum class EMouseDirection : uint8
-{
-    None        UMETA(DisplayName = "None"),
-    Up          UMETA(DisplayName = "Up"),
-    Down        UMETA(DisplayName = "Down"),
-    Left        UMETA(DisplayName = "Left"),
-    Right       UMETA(DisplayName = "Right"),
-    UpRight     UMETA(DisplayName = "Up Right"),
-    UpLeft      UMETA(DisplayName = "Up Left"),
-    DownRight   UMETA(DisplayName = "Down Right"),
-    DownLeft    UMETA(DisplayName = "Down Left")
-}; 
-
-UENUM(BlueprintType)
-enum class EMoveDirection : uint8
-{
-    None        UMETA(DisplayName = "None"),
-    Up          UMETA(DisplayName = "Up"),
-    Down        UMETA(DisplayName = "Down"),
-    Left        UMETA(DisplayName = "Left"),
-    Right       UMETA(DisplayName = "Right"),
-    UpRight     UMETA(DisplayName = "Up Right"),
-    UpLeft      UMETA(DisplayName = "Up Left"),
-    DownRight   UMETA(DisplayName = "Down Right"),
-    DownLeft    UMETA(DisplayName = "Down Left")
-};
-
-UENUM(BlueprintType)
-enum class EActionState : uint8
-{
-    None            UMETA(DisplayName = "None"),
-    StartAttack     UMETA(DisplayName = "StartAttack"),
-    HoldAttack      UMETA(DisplayName = "HoldAttack"),
-    ReleaseAttack   UMETA(DisplayName = "ReleaseAttack"),
-    ReleaseCast     UMETA(DisplayName = "ReleaseCast"),
-    StartCast       UMETA(DisplayName = "StartCast")
-};
 
 // Declare a dynamic multicast delegate
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPrimaryInterrupted);
 
 
 UCLASS()
-class ANIMATION_API ACombatCharacter : public ACharacter
+class ANIMATION_API ACombatCharacter : public ACharacter, public IDamageable, public IDamager
 {
     GENERATED_BODY()
 
 public:
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "_Camera")
-    class UCameraComponent* CameraComponent;
+
+    float TraceDistance = 300.f;
+    float TraceRadius = 30.f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Perception")
+    UAIPerceptionStimuliSourceComponent* AIPerceptionStimuliSourceComponent;
+
+
 
     ACombatCharacter();
     EActionState GetActionState() const { return ActionState; }
@@ -84,18 +55,14 @@ public:
 protected:
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaTime) override;
-    virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "_Camera")
-    FVector LocalOffset = FVector(-15.f, 0.f, 10.f); 
     // Weapon mesh components
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
     USkeletalMeshComponent* PrimaryWeapon;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapons")
     USkeletalMeshComponent* SecondaryWeapon;
-
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UInventoryComponent* InventoryComponent;
@@ -109,38 +76,20 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
     UMeleeTraceComponent* MeleeTraceComponent;
 
+ 
 
 
+  
+
+public:    
+    
+    
     UPROPERTY(BlueprintReadOnly, Category = "_Mouse Movement")
     EMouseDirection MouseDirection;
     UPROPERTY(BlueprintReadOnly, Category = "_Combat")
-    EMouseDirection AttackDirection;
-
-
+      EMouseDirection AttackDirection;
     UPROPERTY(BlueprintReadOnly, Category = "_Mouse Movement")
     EMoveDirection LastMoveDirection;
-
-
-    // Input handlers
-    void Move(const FInputActionValue& Value);
-    void Look(const FInputActionValue& Value);
-    void DetectMovementDirection(FVector2D Input);
-    void PrimaryStarted(const FInputActionValue& Value);
-    void PrimaryReleased(const FInputActionValue& Value);
-    void SecondaryStarted(const FInputActionValue& Value);
-    void SecondaryReleased(const FInputActionValue& Value);
-    void CastStarted(const FInputActionValue& Value);
-    void CastReleased(const FInputActionValue& Value);
-    void JumpStarted(const FInputActionValue& Value);
-    void InteractStarted(const FInputActionValue& Value);
-    void InteractReleased(const FInputActionValue& Value);
-    void OpenInventoryStarted(const FInputActionValue& Value);
-
-    // Mouse movement detection
-    void DetectMouseDirection(float DeltaX, float DeltaY);
-
-public:
-
     UPROPERTY()
 	AActor* CurrentInteractable;
 
@@ -149,9 +98,7 @@ public:
     UFUNCTION(BlueprintCallable, Category = "_Melee Tracing")
     void StartMeleeTrace();
 
-    /** Returns the last detected mouse direction (usable in AnimBP, etc.) */
-    UFUNCTION(BlueprintCallable, Category = "_Mouse Movement")
-    EMouseDirection GetLastMouseDirection() const;
+
 
     UFUNCTION(BlueprintCallable, Category = "_Mouse Movement")
     EMoveDirection GetLastMoveDirection() const;
@@ -172,8 +119,6 @@ public:
     virtual void SetInteractionMessage_Implementation(const FString& Message);
 
 
-
-
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "_Combat")
     bool PrimaryAvailable = true;
 
@@ -186,52 +131,5 @@ public:
     void InterruptPrimaryAttack();
     virtual void InterruptPrimaryAttack_Implementation();
 
-protected:
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "_Settings")
-    float HorizontalSensitivity = 0.5f;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "_Settings")
-    float VerticalSensitivity = 0.5f;
-
-
-
-    // Input mapping context for enhanced input system
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
-    UInputMappingContext* DefaultMappingContext;
-
-    // Input actions
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
-    UInputAction* MoveAction;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
-    UInputAction* LookAction;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
-    UInputAction* PrimaryAction;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
-    UInputAction* SecondaryAction; 
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
-    UInputAction* CastAction; 
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
-    UInputAction* InteractAction;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
-    UInputAction* JumpAction;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "_Input")
-    UInputAction* OpenInventoryAction;
-
-
-
-    // Mouse movement tracking
-    UPROPERTY(BlueprintReadOnly, Category = "_Mouse Movement")
-    EMouseDirection LastMouseDirection = EMouseDirection::None;
-
-    // Threshold for mouse movement to detect direction
-    UPROPERTY(EditAnywhere, Category = "_Mouse Movement")
-    float MouseMovementThreshold = 1.0f;
 
 };

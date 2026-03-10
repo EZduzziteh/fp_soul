@@ -87,23 +87,20 @@ void UMeleeTraceComponent::PerformTrace()
                 UPrimitiveComponent* HitComp = Hit.GetComponent();
 
                 // Check if hit component blocks attacks
-                bool bBlocksAttack = HitComp && BlockingTags.ContainsByPredicate([HitComp](const FName& Tag) { return HitComp->ComponentHasTag(Tag); });
-
-
-                if (bBlocksAttack)
-                {
-                    if (ACombatCharacter* OwnerChar = Cast<ACombatCharacter>(GetOwner()))
-                    {
-                        OwnerChar->InterruptPrimaryAttack(); // You’ll implement this in your character
-                    }
-
-                    StopTracing(); // Stop tracing immediately
-                    return;
-                }
-
                 bool bDamageable = HitComp && DamageableTags.ContainsByPredicate(
                     [HitComp](const FName& Tag) { return HitComp->ComponentHasTag(Tag); });
 
+                // Everything blocks unless explicitly damageable
+                if (!bDamageable)
+                {
+                    if (ACombatCharacter* OwnerChar = Cast<ACombatCharacter>(GetOwner()))
+                    {
+                        OwnerChar->InterruptPrimaryAttack();
+                    }
+
+                    StopTracing();
+                    return;
+                }
                 if (bDamageable)
                 {
                     AActor* HitActor = Hit.GetActor();
