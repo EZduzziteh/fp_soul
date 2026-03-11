@@ -11,12 +11,11 @@ ANonPlayerCharacter::ANonPlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
     // Create the interaction sphere
+    if(!InteractionSphere)
     InteractionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionSphere"));
 
     InteractionSphere->SetupAttachment(RootComponent);
     InteractionSphere->InitSphereRadius(100.f);
-
-
 
     // Collision settings - allow traces but no blocking
     InteractionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -25,31 +24,13 @@ ANonPlayerCharacter::ANonPlayerCharacter()
     InteractionSphere->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block); // For raycasts
 
 
-
-     TopicManagerComponent = CreateDefaultSubobject<UTopicManagerComponent>(TEXT("InventoryComponent"));
-
-}
-
-// Called when the game starts or when spawned
-void ANonPlayerCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ANonPlayerCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+   if(!TopicManagerComponent)
+   TopicManagerComponent = CreateDefaultSubobject<UTopicManagerComponent>(TEXT("TopicManager"));
 
 }
 
-// Called to bind functionality to input
-void ANonPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-}
+
 
 void ANonPlayerCharacter::HandleInteraction_Implementation(AActor* Interactor)
 {

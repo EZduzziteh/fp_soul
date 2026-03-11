@@ -9,17 +9,20 @@
 #include "Dialogue/TopicManagerComponent.h"
 #include "Combat/Damager.h"
 #include "Combat/Damageable.h"
+#include "Characters/CombatCharacter.h"
 #include "NonPlayerCharacter.generated.h"
 
+
+/*This is meant for characters that are interactable, and potentially cna be enemies.*/
+
 UCLASS()
-class ANIMATION_API ANonPlayerCharacter : public ACharacter, public IInteractable, public IDamageable, public IDamager
+class ANIMATION_API ANonPlayerCharacter : public ACombatCharacter, public IInteractable
 {
 	GENERATED_BODY()
 
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Dialogue")
 	UTopicManagerComponent* TopicManagerComponent;
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bInteractionEnabled = false;
@@ -29,26 +32,10 @@ public:
 	// Sets default values for this character's properties
 	ANonPlayerCharacter();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-
 	// Inherited via IInteractable
-	//void HandleInteraction(AActor* Interactor) override;
-
 	virtual void HandleInteraction_Implementation(AActor* Interactor)override;
 
-
 	virtual bool IsInteractionEnabled_Implementation() const override;
-
-
 
 };

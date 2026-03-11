@@ -14,10 +14,11 @@ public class Animation : ModuleRules
             "InputCore",
             "EnhancedInput",
             "RootMovement",
-            "GameplayTasks",       // For AI task support
-			"AIModule",            // For AIController and Perception
-			"NavigationSystem"     // For MoveTo and pathfinding
-		});
+            "GameplayTasks",       
+			"AIModule",            
+			"NavigationSystem" ,   
+            "Niagara"
+        });
 
         PrivateDependencyModuleNames.AddRange(new string[] { });
     }

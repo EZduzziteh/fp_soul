@@ -4,6 +4,8 @@
 #include "AsyncRootMovement.h"
 #include "PlayerControllers//MainPlayerController.h"
 #include "InputActionValue.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "InputMappingContext.h"
 #include "../../../Plugins/RootMovement/Source/RootMovement/Public/AsyncRootMovement.h"
 ACombatCharacter::ACombatCharacter()
@@ -15,26 +17,31 @@ ACombatCharacter::ACombatCharacter()
 
     GetCharacterMovement()->bOrientRotationToMovement = true;
 
-    AIPerceptionStimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AIPerceptionStimuliSourceComponent"));
+    AIPerceptionStimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AIPerceptionStimuliSource"));
    
     /*Core Components*/
-    InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
-    SpellbookComponent = CreateDefaultSubobject<USpellbookComponent>(TEXT("SpellbookComponent"));
-    StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComponent"));
-    EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentComponent")); 
-    MeleeTraceComponent = CreateDefaultSubobject<UMeleeTraceComponent>(TEXT("MeleeTraceComponent"));
-
+    if (!InventoryComponent)
+    InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory"));
+    if(!SpellbookComponent)
+    SpellbookComponent = CreateDefaultSubobject<USpellbookComponent>(TEXT("Spellbook"));
+    if(!StatsComponent)
+    StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("Stats"));
+    if(!EquipmentComponent)
+    EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("Equipment")); 
+    if(!MeleeTraceComponent)
+    MeleeTraceComponent = CreateDefaultSubobject<UMeleeTraceComponent>(TEXT("MeleeTrace"));
+    
 
 
     /*Weapon Meshes - probably will need to move this to be handled in equipment component on equip?*/
-    PrimaryWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PrimaryWeapon"));
+    PrimaryWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Primary"));
     PrimaryWeapon->SetupAttachment(GetMesh(), FName("Item_R")); // Replace with appropriate socket
     PrimaryWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     PrimaryWeapon->SetOnlyOwnerSee(false);
     PrimaryWeapon->bCastDynamicShadow = true;
     PrimaryWeapon->CastShadow = true;
 
-    SecondaryWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SecondaryWeapon"));
+    SecondaryWeapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Secondary"));
     SecondaryWeapon->SetupAttachment(GetMesh(), FName("Item_L")); // Replace with appropriate socket
     SecondaryWeapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     SecondaryWeapon->SetOnlyOwnerSee(false);
@@ -143,6 +150,26 @@ void ACombatCharacter::SetInteractionMessage_Implementation(const FString& Messa
         if (mainPlayerController) {
             mainPlayerController->HUDWidget->SetText(Message);
         }
+}
+
+void ACombatCharacter::ReceiveDamage_Implementation(AActor* InstigatorActor, const FHitResult& Hit)
+{
+    UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+        GetWorld(),
+        HitEffect,
+        Hit.ImpactPoint
+    );
+
+    if (TakeDamageSoundEffect)
+    {
+        UGameplayStatics::PlaySoundAtLocation(
+            this,
+            TakeDamageSoundEffect,
+            GetActorLocation()
+        );
+    }
+
+
 }
 
 void ACombatCharacter::InterruptPrimaryAttack_Implementation()

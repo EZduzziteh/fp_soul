@@ -59,18 +59,17 @@ void AEnemyAIController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus
 {
     if (!ControlledEnemy) return;
 
-    if (Stimulus.WasSuccessfullySensed())
-    {
+    ACombatCharacter* PerceivedCombatCharacter = Cast<ACombatCharacter>(Actor);
 
-        ControlledEnemy->CombatTarget = Actor;
-        ControlledEnemy->AIState = EEnemyAIState::Combat;
+    if (Stimulus.WasSuccessfullySensed() && PerceivedCombatCharacter)
+    {
+        CombatTarget = PerceivedCombatCharacter;
 
         DEBUG("AIController: Spotted player");
     }
-    else if (Actor == ControlledEnemy->CombatTarget)
+    else if (Actor == CombatTarget)
     {
-        ControlledEnemy->CombatTarget = nullptr;
-        ControlledEnemy->AIState = EEnemyAIState::Patrol;
+        CombatTarget = nullptr;
 
         DEBUG("AIController: Lost player");
     }

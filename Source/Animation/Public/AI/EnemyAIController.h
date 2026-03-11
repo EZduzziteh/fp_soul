@@ -17,6 +17,9 @@ class ANIMATION_API AEnemyAIController : public AAIController
 public:
     AEnemyAIController();
 
+    ACombatCharacter* CombatTarget;
+
+
 protected:
     virtual void OnPossess(APawn* InPawn) override;
 

@@ -15,6 +15,7 @@
 #include "Combat/Damager.h"
 #include "Combat/ActionState.h"
 #include "Combat/MouseDirection.h"
+#include "NiagaraSystem.h"
 #include "Combat/MoveDirection.h"
 #include "CombatCharacter.generated.h"
 
@@ -25,13 +26,26 @@ class USpringArmComponent;
 // Declare a dynamic multicast delegate
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPrimaryInterrupted);
 
-
+/*This is the main character, that all other characters in the game stem from. (including player)*/
 UCLASS()
 class ANIMATION_API ACombatCharacter : public ACharacter, public IDamageable, public IDamager
 {
     GENERATED_BODY()
 
 public:
+
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Damage")
+    void ReceiveDamage(AActor* InstigatorActor, const FHitResult& Hit);
+
+    virtual void ReceiveDamage_Implementation(AActor* InstigatorActor, const FHitResult& Hit) override;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage")
+    USoundBase* TakeDamageSoundEffect;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Damage")
+    UNiagaraSystem* HitEffect;
+
+
 
     float TraceDistance = 300.f;
     float TraceRadius = 30.f;
